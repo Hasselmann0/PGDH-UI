@@ -59,52 +59,57 @@ interface ChatMessage {
         </header>
 
         <!-- Chat History -->
-        <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 relative z-10 custom-scrollbar pb-32">
-          
-          @if (messages().length === 0) {
-            <div class="h-full flex flex-col items-center justify-center text-center opacity-60">
-              <lucide-icon [img]="BotIcon" class="w-16 h-16 mb-4 text-white/40"></lucide-icon>
-              <h3 class="text-xl font-medium mb-2">Bem-vindo à Forja</h3>
-              <p class="max-w-md">Faça uma pergunta sobre {{ heroTrack() }} para iniciar sua jornada de aprendizado.</p>
-            </div>
-          }
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 relative z-10 custom-scrollbar">
+          <div class="max-w-5xl mx-auto space-y-6">
+            
+            @if (messages().length === 0) {
+              <div class="h-full flex flex-col items-center justify-center text-center opacity-60 mt-20">
+                <lucide-icon [img]="BotIcon" class="w-16 h-16 mb-4 text-white/40"></lucide-icon>
+                <h3 class="text-xl font-medium mb-2">Bem-vindo à Forja</h3>
+                <p class="max-w-md">Faça uma pergunta sobre {{ heroTrack() }} para iniciar sua jornada de aprendizado.</p>
+              </div>
+            }
 
-          @for (msg of messages(); track $index) {
-            <div class="flex gap-4" [class.flex-row-reverse]="msg.role === 'user'">
-              <!-- Avatar -->
-              <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                   [ngClass]="msg.role === 'user' ? 'bg-primary/20 text-primary' : 'bg-success/20 text-success'">
-                @if (msg.role === 'user') {
-                  <lucide-icon [img]="UserIcon" class="w-5 h-5"></lucide-icon>
-                } @else {
-                  <lucide-icon [img]="BotIcon" class="w-5 h-5"></lucide-icon>
-                }
+            @for (msg of messages(); track $index) {
+              <div class="flex gap-4" [class.flex-row-reverse]="msg.role === 'user'">
+                <!-- Avatar -->
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                     [ngClass]="msg.role === 'user' ? 'bg-primary/20 text-primary' : 'bg-success/20 text-success'">
+                  @if (msg.role === 'user') {
+                    <lucide-icon [img]="UserIcon" class="w-5 h-5"></lucide-icon>
+                  } @else {
+                    <lucide-icon [img]="BotIcon" class="w-5 h-5"></lucide-icon>
+                  }
+                </div>
+                
+                <!-- Message Bubble -->
+                <div class="max-w-[80%] rounded-2xl p-4 text-[15px] leading-relaxed shadow-sm prose prose-invert prose-p:leading-relaxed prose-pre:bg-black/40 prose-pre:border prose-pre:border-white/10 overflow-hidden"
+                     [ngClass]="msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white/10 text-white/90 border border-white/5 rounded-tl-none'"
+                     [innerHTML]="msg.content | markdown">
+                </div>
               </div>
-              
-              <!-- Message Bubble -->
-              <div class="max-w-[80%] rounded-2xl p-4 text-[15px] leading-relaxed shadow-sm prose prose-invert prose-p:leading-relaxed prose-pre:bg-black/40 prose-pre:border prose-pre:border-white/10"
-                   [ngClass]="msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white/10 text-white/90 border border-white/5 rounded-tl-none'"
-                   [innerHTML]="msg.content | markdown">
-              </div>
-            </div>
-          }
+            }
 
-          <!-- Loading Shimmer -->
-          @if (isLoading()) {
-            <div class="flex gap-4 animate-pulse">
-              <div class="w-10 h-10 rounded-full bg-white/10 flex-shrink-0"></div>
-              <div class="max-w-[80%] bg-white/5 border border-white/5 rounded-2xl rounded-tl-none p-4 space-y-3 w-64">
-                <div class="h-2 bg-white/10 rounded w-3/4"></div>
-                <div class="h-2 bg-white/10 rounded w-1/2"></div>
-                <div class="h-2 bg-white/10 rounded w-5/6"></div>
+            <!-- Loading Shimmer -->
+            @if (isLoading()) {
+              <div class="flex gap-4 animate-pulse">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex-shrink-0"></div>
+                <div class="max-w-[80%] bg-white/5 border border-white/5 rounded-2xl rounded-tl-none p-4 space-y-3 w-64">
+                  <div class="h-2 bg-white/10 rounded w-3/4"></div>
+                  <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                  <div class="h-2 bg-white/10 rounded w-5/6"></div>
+                </div>
               </div>
-            </div>
-          }
+            }
+
+            <!-- Spacer for Input Area -->
+            <div class="h-40 w-full flex-shrink-0"></div>
+          </div>
         </div>
 
         <!-- Input Area -->
         <div class="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-background via-background to-transparent z-20 pt-20">
-          <div class="max-w-4xl mx-auto relative group">
+          <div class="max-w-5xl mx-auto relative group">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 to-success/30 rounded-2xl blur opacity-25 group-focus-within:opacity-50 transition duration-500"></div>
             <div class="relative flex items-center bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
               <input 
