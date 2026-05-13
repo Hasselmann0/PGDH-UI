@@ -6,9 +6,10 @@ Este projeto é uma plataforma educacional interativa desenvolvida com as mais r
 
 - **Angular 21**: Framework base do projeto, utilizando a nova arquitetura de Standalone Components.
 - **Signals**: Gerenciamento de estado reativo e nativo do Angular para troca de dados entre os componentes.
-- **Zoneless Change Detection**: Projeto configurado sem a dependência do *zone.js* para ganho máximo de performance (`provideZonelessChangeDetection`).
-- **Tailwind CSS (v3)**: Framework utilitário CSS para estilizações responsivas, *Dark Mode* elegante e criação de interfaces em *Glassmorphism*.
+- **Zoneless Change Detection**: Projeto configurado sem a dependência do _zone.js_ para ganho máximo de performance (`provideZonelessChangeDetection`).
+- **Tailwind CSS (v3) + Typography**: Framework utilitário CSS para estilizações responsivas, _Dark Mode_ elegante e criação de interfaces em _Glassmorphism_. O plugin `@tailwindcss/typography` é usado para estilizar os blocos de Markdown.
 - **Lucide Angular**: Biblioteca de ícones moderna e leve.
+- **Marked & DOMPurify**: Ferramentas usadas para converter respostas da IA (em Markdown) para HTML seguro contra falhas de segurança (XSS) renderizado diretamente no chat.
 
 ---
 
@@ -17,20 +18,25 @@ Este projeto é uma plataforma educacional interativa desenvolvida com as mais r
 A plataforma é dividida em dois fluxos principais:
 
 ### 1. The Quest (`/quest`)
+
 A tela de boas-vindas gamificada.
-- **Visual**: Design em *Glassmorphism* com tema *Dark Mode*, gradientes baseados na classe escolhida e animações de *hover* refinadas.
+
+- **Visual**: Design em _Glassmorphism_ com tema _Dark Mode_, gradientes baseados na classe escolhida e animações de _hover_ refinadas.
 - **Funcionalidade**: O usuário ("Herói") deve escolher uma das trilhas de estudo (ex: Back-End, Front-End, Fullstack, QA, DevOps). A escolha é salva globalmente na aplicação e o redireciona para a próxima fase da jornada.
 
 ### 2. The Forge (`/forge`)
+
 A interface do Mentor / Chat.
-- **Visual**: Layout similar às principais IAs conversacionais do mercado (ChatGPT/Claude). Possui uma *Sidebar* que resume o *Status do Herói* (trilha escolhida na view anterior).
-- **Funcionalidade**: Integração com API (N8N) via requisições assíncronas no padrão Angular (`HttpClient`). Conta com efeitos visuais como *Shimmer Loading* enquanto aguarda a resposta do webhook do N8N.
+
+- **Visual**: Layout similar às principais IAs conversacionais do mercado (ChatGPT/Claude), com uma coluna centralizada e de largura controlada (`max-w-5xl`) para facilitar a leitura. Possui uma _Sidebar_ que resume o _Status do Herói_ (trilha escolhida na view anterior).
+- **Funcionalidade**: Integração com API (N8N) via requisições assíncronas no padrão Angular (`HttpClient`). Conta com renderização dinâmica de **Markdown** para formatar a resposta das IAs com tabelas, negritos e blocos de código formatados com estilos do Tailwind. Conta também com efeitos visuais como _Shimmer Loading_ enquanto aguarda a resposta do N8N.
 
 ---
 
 ## 🏗️ Como Rodar o Projeto
 
 ### Pré-requisitos
+
 - [Node.js](https://nodejs.org/) instalado (recomendado v20+).
 - NPM (incluso no Node.js).
 
@@ -54,14 +60,14 @@ A interface do Mentor / Chat.
 ## 🔌 Integração N8N (Webhook)
 
 O serviço `N8nApiService` (`src/app/core/services/n8n-api.service.ts`) gerencia as requisições enviadas ao painel do N8N.
-Atualmente, as requisições estão apontadas para uma `webhookUrl` genérica e são simuladas em caso de falha de conexão (para testar os fluxos da UI). 
 
-Para conectar ao seu próprio fluxo real:
-1. Abra o arquivo `n8n-api.service.ts`.
-2. Substitua o valor de `webhookUrl` pela URL do seu webhook de produção/teste do N8N. O payload enviado segue o formato:
-   ```json
-   {
-     "subject": "Front-End",
-     "user_prompt": "Como funciona o CSS Grid?"
-   }
-   ```
+O payload enviado ao back-end (N8N) a cada mensagem enviada pelo usuário segue o formato:
+
+```json
+{
+  "subject": "Front-End",
+  "user_prompt": "Como funciona o CSS Grid?"
+}
+```
+
+Para garantir que tudo funcione, lembre-se de sempre manter o seu Workflow no painel do N8N configurado como **Active/Ativo**.
