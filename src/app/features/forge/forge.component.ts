@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LucideAngularModule, Send, User, Bot, Shield, ChevronLeft } from 'lucide-angular';
 import { HeroStateService } from '../../core/services/hero-state.service';
 import { N8nApiService } from '../../core/services/n8n-api.service';
+import { MarkdownPipe } from '../../core/pipes/markdown.pipe';
 
 interface ChatMessage {
   role: 'user' | 'ia';
@@ -14,7 +15,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-forge',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, MarkdownPipe],
   template: `
     <div class="h-screen flex bg-background text-white overflow-hidden">
       <!-- Sidebar -->
@@ -81,9 +82,9 @@ interface ChatMessage {
               </div>
               
               <!-- Message Bubble -->
-              <div class="max-w-[80%] rounded-2xl p-4 text-[15px] leading-relaxed shadow-sm"
-                   [ngClass]="msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white/10 text-white/90 border border-white/5 rounded-tl-none'">
-                {{ msg.content }}
+              <div class="max-w-[80%] rounded-2xl p-4 text-[15px] leading-relaxed shadow-sm prose prose-invert prose-p:leading-relaxed prose-pre:bg-black/40 prose-pre:border prose-pre:border-white/10"
+                   [ngClass]="msg.role === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white/10 text-white/90 border border-white/5 rounded-tl-none'"
+                   [innerHTML]="msg.content | markdown">
               </div>
             </div>
           }

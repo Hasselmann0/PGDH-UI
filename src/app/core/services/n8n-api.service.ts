@@ -12,8 +12,8 @@ export interface ChatPayload {
 })
 export class N8nApiService {
   private http = inject(HttpClient);
-  // URL genérica para fins de demonstração
-  private readonly webhookUrl = 'https://n8n.example.com/webhook/chat';
+  // URL do webhook do N8N (Modo Produção)
+  private readonly webhookUrl = 'https://hasselmanno.app.n8n.cloud/webhook/pgdh-mentor';
 
   sendMessage(payload: ChatPayload): Observable<any> {
     return this.http.post(this.webhookUrl, payload);
